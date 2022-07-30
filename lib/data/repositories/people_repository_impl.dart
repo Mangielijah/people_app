@@ -42,7 +42,7 @@ class PeopleRepositoryImpl implements PeopleRepository {
         await localDataSource.savePeople(peopleList, pageNumber);
       }
       final people = peopleList.map((p) => p.toDomain()).toList();
-      if (inMemoryCache.getCachedValue() == null) {
+      if (inMemoryCache.isEmpty) {
         inMemoryCache.save(data: people, page: pageNumber);
       }
       return Right(people);
@@ -57,7 +57,7 @@ class PeopleRepositoryImpl implements PeopleRepository {
   Future<Either<Failure, List<Person>>> _getPeopleFromStorage(
       int pageNumber) async {
     try {
-      if (inMemoryCache.getCachedValue() == null) {
+      if (inMemoryCache.isEmpty) {
         final peopleList = await localDataSource.getPeople();
         final people = peopleList.map((p) => p.toDomain()).toList();
         inMemoryCache.save(data: people, page: pageNumber);
