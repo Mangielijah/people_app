@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:people_app/data/models/person_dto.dart';
 import 'package:people_app/service_locator.config.dart';
 
 final serviceLocator = GetIt.instance;
@@ -13,6 +14,5 @@ final serviceLocator = GetIt.instance;
 void configureDependencies() async {
   $initGetIt(serviceLocator);
   await Hive.initFlutter();
-  // Hive.registerAdapter(UserDTOAdapter());
-  // Hive.registerAdapter(DocumentDTOAdapter());
+  Hive.registerAdapter(PersonDTOAdapter());
 }

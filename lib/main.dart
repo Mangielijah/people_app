@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:people_app/service_locator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
