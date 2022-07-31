@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:people_app/domain/entities/person.dart';
 import 'package:people_app/presentation/provider.dart';
 import 'package:people_app/presentation/state/home_state.dart';
 
@@ -14,6 +13,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    HomeState homeState = ref.watch(homeStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("RickAndMorty - Provider"),
@@ -21,43 +21,34 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: Center(
         child: Container(
           color: Colors.white,
-          child: _showBody(),
+          child: homeState.when(
+            loading: (_) {
+              return const CircularProgressIndicator();
+            },
+            data: (pageNumber, people) {
+              return ListView.builder(
+                itemCount: people.length,
+                itemBuilder: (context, index) {
+                  final person = people[index];
+                  return ListTile(
+                    leading: Image.network(
+                      person.profile_path,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Text('😢\noffline'),
+                    ),
+                    title: Text(person.name),
+                  );
+                },
+              );
+            },
+            error: (pageNumber, error) {
+              return Center(
+                child: Text(error),
+              );
+            },
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _showBody() {
-    HomeState homeState = ref.watch(homeStateProvider);
-    return homeState.when(
-      loading: (_) {
-        return const CircularProgressIndicator();
-      },
-      data: (pageNumber, people) {
-        return _showCharactersList(pageNumber, people);
-      },
-      error: (pageNumber, error) {
-        return Center(
-          child: Text(error),
-        );
-      },
-    );
-  }
-
-  Widget _showCharactersList(int pageNumber, List<Person> people) {
-    return ListView.builder(
-      itemCount: people.length,
-      itemBuilder: (context, index) {
-        final person = people[index];
-        return ListTile(
-          leading: Image.network(
-            person.profile_path,
-            errorBuilder: (context, error, stackTrace) =>
-                const Text('😢\noffline'),
-          ),
-          title: Text(person.name),
-        );
-      },
     );
   }
 }
