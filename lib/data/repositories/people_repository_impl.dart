@@ -52,8 +52,12 @@ class PeopleRepositoryImpl implements PeopleRepository {
         inMemoryCache.save(data: people, page: pageNumber);
       }
       return Right(people);
-    } on ApiException catch (e) {
-      return Left(ServerFailure(errorMessage: e.toString()));
+    } on ApiException {
+      try {
+        return _getPeopleFromStorage(pageNumber);
+      } catch (e) {
+        return Left(ServerFailure(errorMessage: e.toString()));
+      }
     } catch (e) {
       return const Left(
           NetworkFailure(errorMessage: "Check Internet Connectivity"));
@@ -82,6 +86,19 @@ class PeopleRepositoryImpl implements PeopleRepository {
   Future<Either<Failure, List<String>>> getPersonMedia(int personId) async {
     try {
       final mediaList = (await remoteDataSource.getPersonMedia(personId));
+      return Right(mediaList);
+    } on ApiException catch (e) {
+      return Left(ServerFailure(errorMessage: e.toString()));
+    } catch (e) {
+      return const Left(
+          NetworkFailure(errorMessage: "Check Internet Connectivity"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> downloadMedia(String filename) async {
+    try {
+      final mediaList = (await remoteDataSource.downloadMedia(filename));
       return Right(mediaList);
     } on ApiException catch (e) {
       return Left(ServerFailure(errorMessage: e.toString()));

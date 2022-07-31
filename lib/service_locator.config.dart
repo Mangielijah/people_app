@@ -17,12 +17,13 @@ import 'data/datasources/people_remote_datasource.dart' as _i8;
 import 'data/memory/in_memory_cache.dart' as _i4;
 import 'data/repositories/people_repository_impl.dart' as _i10;
 import 'domain/repositories/people_repository.dart' as _i9;
-import 'domain/usecases/get_favorite_people.dart' as _i11;
-import 'domain/usecases/get_person_media.dart' as _i13;
-import 'domain/usecases/get_popular_people.dart' as _i12;
-import 'module_registry.dart' as _i15;
+import 'domain/usecases/download_media.dart' as _i11;
+import 'domain/usecases/get_favorite_people.dart' as _i12;
+import 'domain/usecases/get_person_media.dart' as _i14;
+import 'domain/usecases/get_popular_people.dart' as _i13;
+import 'module_registry.dart' as _i16;
 import 'presentation/state/home/home_state_notifier.dart'
-    as _i14; // ignore_for_file: unnecessary_lambdas
+    as _i15; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -44,14 +45,16 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       inMemoryCache: get<_i4.InMemoryCache>(),
       remoteDataSource: get<_i8.PeopleRemoteDataSource>(),
       localDataSource: get<_i7.PeopleLocalDataSource>()));
-  gh.factory<_i11.GetFavoritePeople>(
-      () => _i11.GetFavoritePeople(get<_i9.PeopleRepository>()));
-  gh.factory<_i12.GetPeople>(() => _i12.GetPeople(get<_i9.PeopleRepository>()));
-  gh.factory<_i13.GetPersonMedia>(
-      () => _i13.GetPersonMedia(get<_i9.PeopleRepository>()));
-  gh.factory<_i14.HomeStateNotifier>(
-      () => _i14.HomeStateNotifier(get<_i12.GetPeople>()));
+  gh.factory<_i11.DownloadMedia>(
+      () => _i11.DownloadMedia(get<_i9.PeopleRepository>()));
+  gh.factory<_i12.GetFavoritePeople>(
+      () => _i12.GetFavoritePeople(get<_i9.PeopleRepository>()));
+  gh.factory<_i13.GetPeople>(() => _i13.GetPeople(get<_i9.PeopleRepository>()));
+  gh.factory<_i14.GetPersonMedia>(
+      () => _i14.GetPersonMedia(get<_i9.PeopleRepository>()));
+  gh.factory<_i15.HomeStateNotifier>(
+      () => _i15.HomeStateNotifier(get<_i13.GetPeople>()));
   return get;
 }
 
-class _$RegisterModule extends _i15.RegisterModule {}
+class _$RegisterModule extends _i16.RegisterModule {}

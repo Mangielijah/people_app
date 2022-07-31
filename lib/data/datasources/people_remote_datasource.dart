@@ -6,6 +6,7 @@ abstract class PeopleRemoteDataSource {
   Future<List<PersonDto>> getPeople(int page);
   Future<PersonDto> getPersonDetail(int personId);
   Future<List<String>> getPersonMedia(int personId);
+  Future<bool> downloadMedia(String filename);
 }
 
 @Injectable(as: PeopleRemoteDataSource)
@@ -37,6 +38,16 @@ class PeopleRemoteDataSourceImple implements PeopleRemoteDataSource {
     try {
       final mediaList = await apiClient.getPersonMedia(personId);
       return mediaList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> downloadMedia(String filename) async {
+    try {
+      final completed = await apiClient.downloadFile(filename);
+      return completed;
     } catch (e) {
       rethrow;
     }

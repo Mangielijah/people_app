@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:people_app/commons/utils.dart';
 import 'package:people_app/domain/entities/person.dart';
 import 'package:people_app/presentation/detail_screen.dart';
-import 'package:people_app/presentation/helpers/utils.dart';
+import 'package:people_app/presentation/widgets/image_display.dart';
 import 'package:people_app/presentation/widgets/person_like_widget.dart';
 import 'package:people_app/presentation/widgets/person_name.dart';
 import 'package:people_app/presentation/widgets/popularity_score.dart';
@@ -35,31 +33,10 @@ class PersonCard extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Stack(
               children: [
-                CachedNetworkImage(
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Center(
-                    child: LoadingAnimationWidget.threeRotatingDots(
-                      color: const Color(0xffffb82f),
-                      size: 50,
-                    ),
-                  ),
-                  errorWidget: (_, __, ___) => Container(
-                    color: const Color(0xff040720),
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Center(
-                      child: Text(
-                        'No Image Found',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  imageUrl:
-                      getImageUrl(person.profile_path, ImageSizeType.back_drop),
+                ImageDisplay(
+                  filename: person.profile_path,
+                  errorMessage: 'No Image Found',
+                  sizeType: ImageSizeType.back_drop,
                 ),
                 Container(
                   width: double.infinity,

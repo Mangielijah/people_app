@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:people_app/commons/network/api_exceptions.dart';
 import 'package:people_app/commons/network/interceptors/logger_interceptor.dart';
+import 'package:people_app/commons/utils.dart';
 import 'package:people_app/data/models/person_dto.dart';
 
 const String _baseUrl = 'https://api.themoviedb.org/3/person';
@@ -92,4 +96,41 @@ class ApiClient {
     final data = resMap['profiles'] as List;
     return data.map((m) => m['file_path'] as String).toList();
   }
+
+  Future<bool> downloadFile(String fileName) async {
+    try {
+      String uri = getImageUrl(fileName, ImageSizeType.download);
+      String savePath = await _getFilePath(fileName.replaceFirst('/', ''));
+      double progress = 0;
+      final response = await Dio().download(
+        uri,
+        savePath,
+        queryParameters: {'api_key': apiKey},
+        deleteOnError: true,
+      );
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } on DioError catch (err) {
+      final errorMessage = ApiException.fromDioError(err);
+      throw errorMessage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+}
+
+//gets the applicationDirectory and path for the to-be downloaded file
+
+// which will be used to save the file to that path in the downloadFile method
+
+Future<String> _getFilePath(uniqueFileName) async {
+  String path = '';
+
+  Directory dir = await getApplicationDocumentsDirectory();
+
+  path = '${dir.path}/$uniqueFileName';
+
+  return path;
 }
