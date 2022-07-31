@@ -27,14 +27,14 @@ class PersonDto with _$PersonDto {
   factory PersonDto({
     @HiveField(PersonDtoFieldId.id) required int id,
     @HiveField(PersonDtoFieldId.name) required String name,
-    @HiveField(PersonDtoFieldId.profile_path) required String profile_path,
+    @HiveField(PersonDtoFieldId.profile_path) String? profile_path,
     @HiveField(PersonDtoFieldId.popularity) required num popularity,
     @HiveField(PersonDtoFieldId.biography) String? biography,
     @HiveField(PersonDtoFieldId.gender) int? gender,
-    @HiveField(PersonDtoFieldId.birthday) required String? birthday,
+    @HiveField(PersonDtoFieldId.birthday) String? birthday,
     @HiveField(PersonDtoFieldId.known_for_department)
         required String? known_for_department,
-    @HiveField(PersonDtoFieldId.deathday) required String? deathday,
+    @HiveField(PersonDtoFieldId.deathday) String? deathday,
     @HiveField(PersonDtoFieldId.also_known_as)
         required List<String>? also_known_as,
   }) = _PersonDto;

@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Person {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get profile_path => throw _privateConstructorUsedError;
+  String? get profile_path => throw _privateConstructorUsedError;
   num get popularity => throw _privateConstructorUsedError;
   String? get biography => throw _privateConstructorUsedError;
   int? get gender => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $PersonCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String profile_path,
+      String? profile_path,
       num popularity,
       String? biography,
       int? gender,
@@ -81,7 +81,7 @@ class _$PersonCopyWithImpl<$Res> implements $PersonCopyWith<$Res> {
       profile_path: profile_path == freezed
           ? _value.profile_path
           : profile_path // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       popularity: popularity == freezed
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
@@ -122,7 +122,7 @@ abstract class _$$_PersonCopyWith<$Res> implements $PersonCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String profile_path,
+      String? profile_path,
       num popularity,
       String? biography,
       int? gender,
@@ -166,7 +166,7 @@ class __$$_PersonCopyWithImpl<$Res> extends _$PersonCopyWithImpl<$Res>
       profile_path: profile_path == freezed
           ? _value.profile_path
           : profile_path // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       popularity: popularity == freezed
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
@@ -205,7 +205,7 @@ class _$_Person extends _Person {
   _$_Person(
       {required this.id,
       required this.name,
-      required this.profile_path,
+      this.profile_path,
       required this.popularity,
       this.biography,
       this.gender,
@@ -221,7 +221,7 @@ class _$_Person extends _Person {
   @override
   final String name;
   @override
-  final String profile_path;
+  final String? profile_path;
   @override
   final num popularity;
   @override
@@ -293,7 +293,7 @@ abstract class _Person extends Person {
   factory _Person(
       {required final int id,
       required final String name,
-      required final String profile_path,
+      final String? profile_path,
       required final num popularity,
       final String? biography,
       final int? gender,
@@ -308,7 +308,7 @@ abstract class _Person extends Person {
   @override
   String get name;
   @override
-  String get profile_path;
+  String? get profile_path;
   @override
   num get popularity;
   @override

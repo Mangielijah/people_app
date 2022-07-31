@@ -20,21 +20,23 @@ mixin _$HomeState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int page_number) loading,
-    required TResult Function(int page_number, List<Person> people) data,
+    required TResult Function(
+            int page_number, List<Person> people, String? error)
+        data,
     required TResult Function(int page_number, String error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
     required TResult orElse(),
   }) =>
@@ -160,7 +162,9 @@ class _$Loading implements Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int page_number) loading,
-    required TResult Function(int page_number, List<Person> people) data,
+    required TResult Function(
+            int page_number, List<Person> people, String? error)
+        data,
     required TResult Function(int page_number, String error) error,
   }) {
     return loading(page_number);
@@ -170,7 +174,7 @@ class _$Loading implements Loading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
   }) {
     return loading?.call(page_number);
@@ -180,7 +184,7 @@ class _$Loading implements Loading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
     required TResult orElse(),
   }) {
@@ -241,7 +245,7 @@ abstract class _$$DataCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
   factory _$$DataCopyWith(_$Data value, $Res Function(_$Data) then) =
       __$$DataCopyWithImpl<$Res>;
   @override
-  $Res call({int page_number, List<Person> people});
+  $Res call({int page_number, List<Person> people, String? error});
 }
 
 /// @nodoc
@@ -257,6 +261,7 @@ class __$$DataCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
   $Res call({
     Object? page_number = freezed,
     Object? people = freezed,
+    Object? error = freezed,
   }) {
     return _then(_$Data(
       page_number == freezed
@@ -267,6 +272,10 @@ class __$$DataCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value._people
           : people // ignore: cast_nullable_to_non_nullable
               as List<Person>,
+      error: error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -274,7 +283,8 @@ class __$$DataCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Data implements Data {
-  const _$Data(this.page_number, final List<Person> people) : _people = people;
+  const _$Data(this.page_number, final List<Person> people, {this.error})
+      : _people = people;
 
   @override
   final int page_number;
@@ -286,8 +296,11 @@ class _$Data implements Data {
   }
 
   @override
+  final String? error;
+
+  @override
   String toString() {
-    return 'HomeState.data(page_number: $page_number, people: $people)';
+    return 'HomeState.data(page_number: $page_number, people: $people, error: $error)';
   }
 
   @override
@@ -297,14 +310,16 @@ class _$Data implements Data {
             other is _$Data &&
             const DeepCollectionEquality()
                 .equals(other.page_number, page_number) &&
-            const DeepCollectionEquality().equals(other._people, _people));
+            const DeepCollectionEquality().equals(other._people, _people) &&
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(page_number),
-      const DeepCollectionEquality().hash(_people));
+      const DeepCollectionEquality().hash(_people),
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -315,32 +330,34 @@ class _$Data implements Data {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int page_number) loading,
-    required TResult Function(int page_number, List<Person> people) data,
+    required TResult Function(
+            int page_number, List<Person> people, String? error)
+        data,
     required TResult Function(int page_number, String error) error,
   }) {
-    return data(page_number, people);
+    return data(page_number, people, this.error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
   }) {
-    return data?.call(page_number, people);
+    return data?.call(page_number, people, this.error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
     required TResult orElse(),
   }) {
     if (data != null) {
-      return data(page_number, people);
+      return data(page_number, people, this.error);
     }
     return orElse();
   }
@@ -381,11 +398,13 @@ class _$Data implements Data {
 }
 
 abstract class Data implements HomeState {
-  const factory Data(final int page_number, final List<Person> people) = _$Data;
+  const factory Data(final int page_number, final List<Person> people,
+      {final String? error}) = _$Data;
 
   @override
   int get page_number;
   List<Person> get people;
+  String? get error;
   @override
   @JsonKey(ignore: true)
   _$$DataCopyWith<_$Data> get copyWith => throw _privateConstructorUsedError;
@@ -466,7 +485,9 @@ class _$_Error implements _Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int page_number) loading,
-    required TResult Function(int page_number, List<Person> people) data,
+    required TResult Function(
+            int page_number, List<Person> people, String? error)
+        data,
     required TResult Function(int page_number, String error) error,
   }) {
     return error(page_number, this.error);
@@ -476,7 +497,7 @@ class _$_Error implements _Error {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
   }) {
     return error?.call(page_number, this.error);
@@ -486,7 +507,7 @@ class _$_Error implements _Error {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int page_number)? loading,
-    TResult Function(int page_number, List<Person> people)? data,
+    TResult Function(int page_number, List<Person> people, String? error)? data,
     TResult Function(int page_number, String error)? error,
     required TResult orElse(),
   }) {

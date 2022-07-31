@@ -21,7 +21,7 @@ mixin _$PersonDto {
   @HiveField(PersonDtoFieldId.name)
   String get name => throw _privateConstructorUsedError;
   @HiveField(PersonDtoFieldId.profile_path)
-  String get profile_path => throw _privateConstructorUsedError;
+  String? get profile_path => throw _privateConstructorUsedError;
   @HiveField(PersonDtoFieldId.popularity)
   num get popularity => throw _privateConstructorUsedError;
   @HiveField(PersonDtoFieldId.biography)
@@ -52,7 +52,7 @@ abstract class $PersonDtoCopyWith<$Res> {
       @HiveField(PersonDtoFieldId.name)
           String name,
       @HiveField(PersonDtoFieldId.profile_path)
-          String profile_path,
+          String? profile_path,
       @HiveField(PersonDtoFieldId.popularity)
           num popularity,
       @HiveField(PersonDtoFieldId.biography)
@@ -102,7 +102,7 @@ class _$PersonDtoCopyWithImpl<$Res> implements $PersonDtoCopyWith<$Res> {
       profile_path: profile_path == freezed
           ? _value.profile_path
           : profile_path // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       popularity: popularity == freezed
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
@@ -147,7 +147,7 @@ abstract class _$$_PersonDtoCopyWith<$Res> implements $PersonDtoCopyWith<$Res> {
       @HiveField(PersonDtoFieldId.name)
           String name,
       @HiveField(PersonDtoFieldId.profile_path)
-          String profile_path,
+          String? profile_path,
       @HiveField(PersonDtoFieldId.popularity)
           num popularity,
       @HiveField(PersonDtoFieldId.biography)
@@ -199,7 +199,7 @@ class __$$_PersonDtoCopyWithImpl<$Res> extends _$PersonDtoCopyWithImpl<$Res>
       profile_path: profile_path == freezed
           ? _value.profile_path
           : profile_path // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       popularity: popularity == freezed
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
@@ -241,7 +241,7 @@ class _$_PersonDto extends _PersonDto {
       @HiveField(PersonDtoFieldId.name)
           required this.name,
       @HiveField(PersonDtoFieldId.profile_path)
-          required this.profile_path,
+          this.profile_path,
       @HiveField(PersonDtoFieldId.popularity)
           required this.popularity,
       @HiveField(PersonDtoFieldId.biography)
@@ -249,11 +249,11 @@ class _$_PersonDto extends _PersonDto {
       @HiveField(PersonDtoFieldId.gender)
           this.gender,
       @HiveField(PersonDtoFieldId.birthday)
-          required this.birthday,
+          this.birthday,
       @HiveField(PersonDtoFieldId.known_for_department)
           required this.known_for_department,
       @HiveField(PersonDtoFieldId.deathday)
-          required this.deathday,
+          this.deathday,
       @HiveField(PersonDtoFieldId.also_known_as)
           required final List<String>? also_known_as})
       : _also_known_as = also_known_as,
@@ -267,7 +267,7 @@ class _$_PersonDto extends _PersonDto {
   final String name;
   @override
   @HiveField(PersonDtoFieldId.profile_path)
-  final String profile_path;
+  final String? profile_path;
   @override
   @HiveField(PersonDtoFieldId.popularity)
   final num popularity;
@@ -349,7 +349,7 @@ abstract class _PersonDto extends PersonDto {
       @HiveField(PersonDtoFieldId.name)
           required final String name,
       @HiveField(PersonDtoFieldId.profile_path)
-          required final String profile_path,
+          final String? profile_path,
       @HiveField(PersonDtoFieldId.popularity)
           required final num popularity,
       @HiveField(PersonDtoFieldId.biography)
@@ -357,11 +357,11 @@ abstract class _PersonDto extends PersonDto {
       @HiveField(PersonDtoFieldId.gender)
           final int? gender,
       @HiveField(PersonDtoFieldId.birthday)
-          required final String? birthday,
+          final String? birthday,
       @HiveField(PersonDtoFieldId.known_for_department)
           required final String? known_for_department,
       @HiveField(PersonDtoFieldId.deathday)
-          required final String? deathday,
+          final String? deathday,
       @HiveField(PersonDtoFieldId.also_known_as)
           required final List<String>? also_known_as}) = _$_PersonDto;
   _PersonDto._() : super._();
@@ -374,7 +374,7 @@ abstract class _PersonDto extends PersonDto {
   String get name;
   @override
   @HiveField(PersonDtoFieldId.profile_path)
-  String get profile_path;
+  String? get profile_path;
   @override
   @HiveField(PersonDtoFieldId.popularity)
   num get popularity;

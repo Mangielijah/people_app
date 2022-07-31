@@ -63,8 +63,9 @@ class PeopleRepositoryImpl implements PeopleRepository {
         inMemoryCache.save(data: people, page: pageNumber);
         return Right(people);
       } else {
-        final people = inMemoryCache.getCachedValue();
-        return Right(people);
+        // final people = inMemoryCache.getCachedValue();
+        // return Right(people);
+        return const Left(CacheFailure());
       }
     } catch (e) {
       return Left(CacheFailure(errorMessage: e.toString()));

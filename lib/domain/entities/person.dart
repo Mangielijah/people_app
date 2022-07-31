@@ -8,7 +8,7 @@ class Person with _$Person {
   factory Person({
     required int id,
     required String name,
-    required String profile_path,
+    String? profile_path,
     required num popularity,
     String? biography,
     int? gender,

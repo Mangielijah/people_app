@@ -24,19 +24,32 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  // Let's mark a todo as completed
-  void likePerson(String personId) {
-    // state = [
-    //   for (final person in state)
-    //     // we're marking only the matching todo as completed
-    //     if (person.id == personId)
-    //       // Once more, since our state is immutable, we need to make a copy
-    //       // of the todo. We're using our `copyWith` method implemented before
-    //       // to help with that.
-    //       person.copyWith(completed: !todo.completed)
-    //     else
-    //       // other todos are not modified
-    //       person,
-    // ];
+  void loadMore({int? retryCount}) async {
+    if (state.page_number < 500 && (retryCount == null || retryCount < 3)) {
+      final result =
+          await getPeople(GetPeopleParams(page_number: state.page_number + 1));
+      final people = result.getOrElse(() => []);
+      if (people.isNotEmpty) {
+        state = (state as Data).copyWith(
+          page_number: state.page_number + 1,
+          people: [...(state as Data).people, ...people],
+          error: null,
+        );
+      } else {
+        Future.delayed(
+          const Duration(seconds: 1),
+          () => loadMore(retryCount: (retryCount == null) ? 1 : retryCount + 1),
+        );
+        // loadMore();
+      }
+    } else {
+      if (state.page_number < 500) {
+        state = (state as Data)
+            .copyWith(error: "Network Error Could Not Load More Data");
+      } else {
+        state =
+            (state as Data).copyWith(error: "Your Reached The End of the Page");
+      }
+    }
   }
 }

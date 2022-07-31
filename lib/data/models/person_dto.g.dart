@@ -19,7 +19,7 @@ class PersonDTOAdapter extends TypeAdapter<PersonDto> {
     return PersonDto(
       id: fields[0] as int,
       name: fields[1] as String,
-      profile_path: fields[2] as String,
+      profile_path: fields[2] as String?,
       popularity: fields[3] as num,
       biography: fields[4] as String?,
       gender: fields[5] as int?,
@@ -74,7 +74,7 @@ class PersonDTOAdapter extends TypeAdapter<PersonDto> {
 PersonDto _$PersonDtoFromJson(Map<String, dynamic> json) => PersonDto(
       id: json['id'] as int,
       name: json['name'] as String,
-      profile_path: json['profile_path'] as String,
+      profile_path: json['profile_path'] as String?,
       popularity: json['popularity'] as num,
       biography: json['biography'] as String?,
       gender: json['gender'] as int?,
@@ -90,8 +90,6 @@ Map<String, dynamic> _$PersonDtoToJson(PersonDto instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'name': instance.name,
-    'profile_path': instance.profile_path,
-    'popularity': instance.popularity,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -100,6 +98,8 @@ Map<String, dynamic> _$PersonDtoToJson(PersonDto instance) {
     }
   }
 
+  writeNotNull('profile_path', instance.profile_path);
+  val['popularity'] = instance.popularity;
   writeNotNull('biography', instance.biography);
   writeNotNull('gender', instance.gender);
   writeNotNull('birthday', instance.birthday);
