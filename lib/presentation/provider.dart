@@ -32,10 +32,12 @@ final downloadStateProvider =
 final favoriteStatusProvider =
     StateNotifierProvider.family<FavoriteWidgetNotifier, LikeState, Person>(
   ((ref, person) => FavoriteWidgetNotifier(
-      serviceLocator<GetFavoriteStatus>(),
-      serviceLocator<AddToFavorite>(),
-      serviceLocator<RemoveFromFavorite>(),
-      person)),
+        serviceLocator<GetFavoriteStatus>(),
+        serviceLocator<AddToFavorite>(),
+        serviceLocator<RemoveFromFavorite>(),
+        person,
+        ref,
+      )),
 );
 final favoriteTabProvider =
     StateNotifierProvider<FavTabNotifier, FavoriteTabState>(

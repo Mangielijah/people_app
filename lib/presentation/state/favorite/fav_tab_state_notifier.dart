@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:injectable/injectable.dart';
 import 'package:people_app/commons/domain/usecases.dart';
+import 'package:people_app/domain/entities/person.dart';
 import 'package:people_app/domain/usecases/favorite_people.dart';
 import 'package:people_app/presentation/state/favorite/favorite_tab_state.dart';
 
@@ -21,5 +22,16 @@ class FavTabNotifier extends StateNotifier<FavoriteTabState> {
     } else {
       state = FavoriteTabState.data(people);
     }
+  }
+
+  void removePerson(Person person) {
+    final people = [...(state as FavoriteList).people];
+    people.remove(person);
+    state = FavoriteTabState.data(people);
+  }
+
+  void addPerson(Person person) {
+    final people = [...(state as FavoriteList).people];
+    state = FavoriteTabState.data([...people, person]);
   }
 }

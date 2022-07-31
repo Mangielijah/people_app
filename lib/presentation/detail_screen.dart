@@ -51,7 +51,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Stack(
                 children: [
                   ImageDisplay(
-                    filename: person.profile_path!,
+                    filename: person.profile_path,
                     errorMessage: 'No Image Found',
                     sizeType: ImageSizeType.back_drop,
                   ),
