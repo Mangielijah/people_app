@@ -60,6 +60,22 @@ class ApiClient {
     }
   }
 
+  Future<List<String>> getPersonMedia(int personId) async {
+    try {
+      final response = await _dio.get(
+        '/$personId/images',
+        queryParameters: {'api_key': apiKey},
+      );
+      final mediaList = _getMediaListFromResponse(response);
+      return mediaList;
+    } on DioError catch (err) {
+      final errorMessage = ApiException.fromDioError(err);
+      throw errorMessage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   List<PersonDto> _getPeopleFromResponse(Response response) {
     final resMap = response.data;
     final data = resMap['results'] as List;
@@ -69,5 +85,11 @@ class ApiClient {
   PersonDto _getPersonFromResponse(Response response) {
     final data = response.data;
     return PersonDto.fromJson(data);
+  }
+
+  List<String> _getMediaListFromResponse(Response response) {
+    final resMap = response.data;
+    final data = resMap['profiles'] as List;
+    return data.map((m) => m['file_path'] as String).toList();
   }
 }

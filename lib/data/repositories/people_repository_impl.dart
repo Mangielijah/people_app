@@ -5,6 +5,7 @@ import 'package:people_app/commons/network/network_info.dart';
 import 'package:people_app/data/datasources/people_local_datasource.dart';
 import 'package:people_app/data/datasources/people_remote_datasource.dart';
 import 'package:people_app/data/memory/in_memory_cache.dart';
+import 'package:people_app/data/models/person_dto.dart';
 import 'package:people_app/domain/entities/person.dart';
 import 'package:people_app/commons/errors/failures.dart';
 import 'package:people_app/domain/repositories/people_repository.dart';
@@ -37,7 +38,12 @@ class PeopleRepositoryImpl implements PeopleRepository {
   Future<Either<Failure, List<Person>>> _getPeopleFromNetwork(
       int pageNumber) async {
     try {
-      final peopleList = await remoteDataSource.getPeople(pageNumber);
+      final pList = (await remoteDataSource.getPeople(pageNumber));
+      final List<PersonDto> peopleList = [];
+      for (final person in pList) {
+        final p = await remoteDataSource.getPersonDetail(person.id);
+        peopleList.add(p);
+      }
       if (pageNumber == 1 && inMemoryCache.currentSavedPages < 1) {
         await localDataSource.savePeople(peopleList, pageNumber);
       }
@@ -69,6 +75,19 @@ class PeopleRepositoryImpl implements PeopleRepository {
       }
     } catch (e) {
       return Left(CacheFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getPersonMedia(int personId) async {
+    try {
+      final mediaList = (await remoteDataSource.getPersonMedia(personId));
+      return Right(mediaList);
+    } on ApiException catch (e) {
+      return Left(ServerFailure(errorMessage: e.toString()));
+    } catch (e) {
+      return const Left(
+          NetworkFailure(errorMessage: "Check Internet Connectivity"));
     }
   }
 }

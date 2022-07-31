@@ -1,16 +1,10 @@
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:people_app/domain/entities/person.dart';
-import 'package:people_app/presentation/helpers/utils.dart';
-import 'package:people_app/presentation/home_loaders.dart';
-import 'package:people_app/presentation/person_like_widget.dart';
+import 'package:people_app/presentation/widgets/home_loaders.dart';
+import 'package:people_app/presentation/widgets/person_card.dart';
 import 'package:people_app/presentation/provider.dart';
-import 'package:people_app/presentation/state/home_state.dart';
+import 'package:people_app/presentation/state/home/home_state.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -32,7 +26,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 12.5),
                   child: Text(
-                    "Movies",
+                    "PipleApp",
                     style: GoogleFonts.montserrat(
                       color: Colors.black87,
                       fontSize: 21.sp,
@@ -114,6 +108,22 @@ class _PeopleState extends ConsumerState<_People> {
   @override
   Widget build(BuildContext context) {
     HomeState homeState = ref.watch(homeStateProvider);
+    ref.listen<HomeState>(homeStateProvider, (prevState, currentState) {
+      if (prevState is Data && (currentState as Data).error != null) {
+        //Show error toast
+        final snackBar = SnackBar(
+          content: Text((currentState).error!),
+          duration: const Duration(minutes: 1),
+          action: SnackBarAction(
+            label: 'Try Again',
+            onPressed: () {
+              ref.read(homeStateProvider.notifier).loadMore();
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
     return Container(
       color: Colors.white,
       child: homeState.when(
@@ -150,156 +160,6 @@ class _PeopleState extends ConsumerState<_People> {
           );
         },
       ),
-    );
-  }
-}
-
-class PersonCard extends StatelessWidget {
-  final Person person;
-  const PersonCard({Key? key, required this.person}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-        height: 450,
-        decoration: const BoxDecoration(
-          color: Color(0xff040720),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          child: Stack(
-            children: [
-              CachedNetworkImage(
-                width: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Center(
-                  child: LoadingAnimationWidget.threeRotatingDots(
-                    color: const Color(0xff040720),
-                    size: 50,
-                  ),
-                ),
-                errorWidget: (_, __, ___) => Container(
-                  color: const Color(0xff040720),
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: Center(
-                    child: Text(
-                      'No Image Found',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                imageUrl: getImageUrl(person.profile_path),
-              ),
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: const Color(0x150c0d13),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
-                child: SizedBox(
-                  height: 50.w,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PopularityScore(
-                        popularityScore: person.popularity,
-                      ),
-                      LikeWidget(person_id: person.id),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 20,
-                bottom: 30,
-                child: PersonName(
-                  name: person.name,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PopularityScore extends StatelessWidget {
-  final num? popularityScore;
-  const PopularityScore({
-    Key? key,
-    this.popularityScore,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    late String score;
-    if (popularityScore == null) {
-      score = 'N/A';
-    } else {
-      score = '${min(popularityScore!.toInt(), 999)}';
-    }
-    return Container(
-      width: 50.w,
-      height: 50.w,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-        ),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Center(
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 20,
-          child: Center(
-            child: Text(
-              score,
-              style: GoogleFonts.montserrat(
-                color: const Color(0xff0c0d13),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PersonName extends StatelessWidget {
-  final String name;
-  const PersonName({
-    Key? key,
-    this.name = 'No Name',
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          width: 260.w,
-          color: const Color(0xffffb82f),
-          child: Text(
-            name,
-            overflow: TextOverflow.clip,
-            style: GoogleFonts.montserrat(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 28.sp,
-            ),
-          ),
-        );
-      },
     );
   }
 }

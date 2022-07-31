@@ -9,18 +9,18 @@ const String FAVORITE_BOX = "FAVORITE_BOX";
 abstract class PeopleLocalDataSource {
   Future<List<PersonDto>> getPeople();
   Future<void> savePeople(List<PersonDto> people, int page);
-  Future<List<int>> getFavorites(int page);
+  Future<List<PersonDto>> getFavorites(int page);
   Future<void> removeFromFavorite(int personId);
-  Future<void> addToFavorite(int personId);
+  Future<void> addToFavorite(PersonDto person);
 }
 
 @Injectable(as: PeopleLocalDataSource)
 class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
   @override
-  Future<List<int>> getFavorites(int page) async {
+  Future<List<PersonDto>> getFavorites(int page) async {
     if (Hive.isBoxOpen(FAVORITE_BOX)) {
       try {
-        final favorites = Hive.box(FAVORITE_BOX).toMap().keys as List<int>;
+        final favorites = Hive.box(FAVORITE_BOX).values as List<PersonDto>;
         return favorites;
       } catch (e) {
         throw CacheException();
@@ -28,7 +28,7 @@ class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
     } else {
       try {
         final favBox = await Hive.openBox(FAVORITE_BOX);
-        final favorites = favBox.toMap().keys as List<int>;
+        final favorites = favBox.values as List<PersonDto>;
         return favorites;
       } catch (e) {
         throw CacheException();
@@ -37,10 +37,10 @@ class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
   }
 
   @override
-  Future<void> addToFavorite(int personId) async {
+  Future<void> addToFavorite(PersonDto person) async {
     try {
       final favBox = await Hive.openBox(FAVORITE_BOX);
-      await favBox.put(personId, personId);
+      await favBox.put(person.id, person);
     } catch (e) {
       throw CacheException();
     }
@@ -83,7 +83,7 @@ class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
   Future<void> savePeople(List<PersonDto> people, int page) async {
     try {
       final peopleBox = await Hive.openBox(PEOPLE_BOX);
-      return peopleBox.put(page, people);
+      peopleBox.put(page, people);
     } catch (e) {
       throw CacheException();
     }
