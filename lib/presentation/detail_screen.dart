@@ -85,7 +85,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ],
                           ),
-                          LikeWidget(person_id: person.id),
+                          LikeWidget(person: person),
                         ],
                       ),
                     ),

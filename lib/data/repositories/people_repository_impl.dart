@@ -23,9 +23,38 @@ class PeopleRepositoryImpl implements PeopleRepository {
     required this.localDataSource,
   });
   @override
-  Future<Either<Failure, List<Person>>> getFavoritePeople() {
-    // TODO: implement getFavoritePeople
-    throw UnimplementedError();
+  Future<Either<Failure, List<Person>>> getFavoritePeople() async {
+    try {
+      final fav = (await localDataSource.getFavorites());
+      final favorites = fav.map((person) => person.toDomain()).toList();
+      return Right(favorites);
+    } catch (e) {
+      return const Left(
+          CacheFailure(errorMessage: "Check Internet Connectivity"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addToFavorite(Person person) async {
+    try {
+      final res =
+          await localDataSource.addToFavorite(PersonDto.fromDomain(person));
+      return Right(res);
+    } catch (e) {
+      return const Left(
+          CacheFailure(errorMessage: "Check Internet Connectivity"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeFavorite(int personId) async {
+    try {
+      final res = await localDataSource.removeFromFavorite(personId);
+      return Right(res);
+    } catch (e) {
+      return const Left(
+          CacheFailure(errorMessage: "Check Internet Connectivity"));
+    }
   }
 
   @override
@@ -105,6 +134,17 @@ class PeopleRepositoryImpl implements PeopleRepository {
     } catch (e) {
       return const Left(
           NetworkFailure(errorMessage: "Check Internet Connectivity"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isFavorite(int personId) async {
+    try {
+      final isFavorite = (await localDataSource.checkFavoriteStatus(personId));
+      return Right(isFavorite);
+    } catch (e) {
+      return const Left(
+          CacheFailure(errorMessage: "Check Internet Connectivity"));
     }
   }
 }

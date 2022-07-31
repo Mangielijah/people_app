@@ -54,7 +54,7 @@ class PersonCard extends StatelessWidget {
                         PopularityScore(
                           popularityScore: person.popularity,
                         ),
-                        LikeWidget(person_id: person.id),
+                        LikeWidget(person: person),
                       ],
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:people_app/presentation/favorite_tab_screen.dart';
 import 'package:people_app/presentation/widgets/home_loaders.dart';
 import 'package:people_app/presentation/widgets/person_card.dart';
 import 'package:people_app/presentation/provider.dart';
@@ -73,7 +74,7 @@ class HomePage extends StatelessWidget {
         body: const TabBarView(
           children: [
             _People(),
-            _People(),
+            FavoriteList(),
           ],
         ),
       ),

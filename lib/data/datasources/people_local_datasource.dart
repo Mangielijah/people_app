@@ -9,30 +9,22 @@ const String FAVORITE_BOX = "FAVORITE_BOX";
 abstract class PeopleLocalDataSource {
   Future<List<PersonDto>> getPeople();
   Future<void> savePeople(List<PersonDto> people, int page);
-  Future<List<PersonDto>> getFavorites(int page);
+  Future<List<PersonDto>> getFavorites();
   Future<void> removeFromFavorite(int personId);
   Future<void> addToFavorite(PersonDto person);
+  Future<bool> checkFavoriteStatus(int personId);
 }
 
 @Injectable(as: PeopleLocalDataSource)
 class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
   @override
-  Future<List<PersonDto>> getFavorites(int page) async {
-    if (Hive.isBoxOpen(FAVORITE_BOX)) {
-      try {
-        final favorites = Hive.box(FAVORITE_BOX).values as List<PersonDto>;
-        return favorites;
-      } catch (e) {
-        throw CacheException();
-      }
-    } else {
-      try {
-        final favBox = await Hive.openBox(FAVORITE_BOX);
-        final favorites = favBox.values as List<PersonDto>;
-        return favorites;
-      } catch (e) {
-        throw CacheException();
-      }
+  Future<List<PersonDto>> getFavorites() async {
+    try {
+      final favBox = await Hive.openBox(FAVORITE_BOX);
+      final favorites = favBox.values.map((p) => p as PersonDto).toList();
+      return favorites;
+    } catch (e) {
+      throw CacheException();
     }
   }
 
@@ -51,6 +43,16 @@ class PeopleLocalDataSourceImpl implements PeopleLocalDataSource {
     try {
       final favBox = await Hive.openBox(FAVORITE_BOX);
       await favBox.delete(personId);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<bool> checkFavoriteStatus(int personId) async {
+    try {
+      final favBox = await Hive.openBox(FAVORITE_BOX);
+      return favBox.containsKey(personId);
     } catch (e) {
       throw CacheException();
     }

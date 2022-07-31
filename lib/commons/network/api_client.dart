@@ -101,7 +101,7 @@ class ApiClient {
     try {
       String uri = getImageUrl(fileName, ImageSizeType.download);
       String savePath = await _getFilePath(fileName.replaceFirst('/', ''));
-      double progress = 0;
+      // double progress = 0;
       final response = await Dio().download(
         uri,
         savePath,
