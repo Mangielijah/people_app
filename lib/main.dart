@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:people_app/presentation/home_screen.dart';
 import 'package:people_app/service_locator.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,13 +18,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'People App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      builder: (context, child) => MaterialApp(
+        title: 'People App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const HomePage(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const HomePage(),
     );
   }
 }

@@ -6,7 +6,7 @@ abstract class RegisterModule {
   @lazySingleton
   InternetConnectionChecker get connectionChecker =>
       InternetConnectionChecker.createInstance(
-        checkInterval: Duration(seconds: 1),
-        checkTimeout: Duration(seconds: 1),
+        checkInterval: const Duration(seconds: 1),
+        checkTimeout: const Duration(seconds: 1),
       );
 }
