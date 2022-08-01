@@ -237,7 +237,14 @@ class _PersonMediaState extends ConsumerState<PersonMedia> {
               );
             },
             error: (error) {
-              return Container();
+              return Container(
+                child: Text(
+                  "Error Fetching Media",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 18,
+                  ),
+                ),
+              );
             },
           ),
         ),

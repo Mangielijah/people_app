@@ -24,9 +24,4 @@ class InMemoryCache {
       }
     }
   }
-
-  // void clean() {
-  //   _cachedValue = [];
-  //   currentSavedPages = 0;
-  // }
 }
