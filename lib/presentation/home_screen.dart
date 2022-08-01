@@ -9,14 +9,39 @@ import 'package:people_app/presentation/state/home/home_state.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
+    ref.listen<HomeState>(homeStateProvider, (prevState, currentState) {
+      if (prevState is Data && (currentState as Data).error != null) {
+        //Show error toast
+        final snackBar = SnackBar(
+          content: Text((currentState).error!),
+          duration: const Duration(minutes: 1),
+          action: SnackBarAction(
+            label: 'Try Again',
+            onPressed: () {
+              ref.read(homeStateProvider.notifier).loadMore();
+            },
+          ),
+        );
+        ScaffoldMessenger.of(_scaffoldKey.currentContext!)
+            .showSnackBar(snackBar);
+      }
+    });
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(AppBar().preferredSize.height + 45),
           child: Column(
@@ -71,10 +96,10 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            _People(),
-            FavoriteList(),
+            _People(homeContext: context),
+            const FavoriteList(),
           ],
         ),
       ),
@@ -83,8 +108,10 @@ class HomePage extends StatelessWidget {
 }
 
 class _People extends ConsumerStatefulWidget {
+  final BuildContext homeContext;
   const _People({
     Key? key,
+    required this.homeContext,
   }) : super(key: key);
 
   @override
@@ -109,22 +136,6 @@ class _PeopleState extends ConsumerState<_People> {
   @override
   Widget build(BuildContext context) {
     HomeState homeState = ref.watch(homeStateProvider);
-    ref.listen<HomeState>(homeStateProvider, (prevState, currentState) {
-      if (prevState is Data && (currentState as Data).error != null) {
-        //Show error toast
-        final snackBar = SnackBar(
-          content: Text((currentState).error!),
-          duration: const Duration(minutes: 1),
-          action: SnackBarAction(
-            label: 'Try Again',
-            onPressed: () {
-              ref.read(homeStateProvider.notifier).loadMore();
-            },
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    });
     return Container(
       color: Colors.white,
       child: homeState.when(
